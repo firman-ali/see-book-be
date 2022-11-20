@@ -1,0 +1,27 @@
+{
+  "name": "see-book-be",
+  "version": "1.0.0",
+  "description": "see-book-be",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firman-ali/see-book-be.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/firman-ali/see-book-be/issues"
+  },
+  "homepage": "https://github.com/firman-ali/see-book-be#readme",
+  "dependencies": {
+    "@hapi/hapi": "^21.0.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.28.0",
+    "nodemon": "^2.0.20"
+  }
+}
