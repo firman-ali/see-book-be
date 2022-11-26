@@ -5,15 +5,15 @@
         "es2021": true,
         "node": true
     },
-    "extends": "eslint:recommended",
-    "overrides": [
-    ],
+    "extends": ["airbnb-base"],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
+        "no-console": "off",
         "no-underscore-dangle": "off",
         "camelcase": "off",
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "arrow-parens": "off"
     }
 }
