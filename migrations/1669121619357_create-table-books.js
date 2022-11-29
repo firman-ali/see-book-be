@@ -24,9 +24,9 @@ exports.up = pgm => {
       notNull: true,
     },
     publisher_id: {
-      type: 'TEXT',
+      type: 'VARCHAR(50)',
       notNull: false,
-      references: 'sellers',
+      references: 'users',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     },
@@ -52,6 +52,10 @@ exports.up = pgm => {
     },
     updated_at: {
       type: 'BIGINT',
+      notNull: false,
+    },
+    book_cover: {
+      type: 'TEXT',
       notNull: false,
     },
   });

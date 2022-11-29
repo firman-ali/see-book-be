@@ -18,7 +18,7 @@ exports.up = pgm => {
     created_by: {
       type: 'VARCHAR(50)',
       notNull: true,
-      references: 'admins',
+      references: 'users',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     },

@@ -1,18 +1,23 @@
 const routes = (handler) => [
   {
     method: 'GET',
-    path: '/v1/users/detail',
+    path: '/v1/users',
     handler: handler.getUserByIdHandler,
   },
   {
-    method: 'GET',
-    path: '/v1/users/detail-seller',
-    handler: handler.getSellerByIdHandler,
+    method: 'POST',
+    path: '/v1/users',
+    handler: handler.postUserByIdHandler,
   },
   {
-    method: 'GET',
-    path: '/v1/users/detail-admin',
-    handler: handler.getAdminByIdHandler,
+    method: 'PUT',
+    path: '/v1/users',
+    handler: handler.putUserByIdHandler,
+  },
+  {
+    method: 'DELETE',
+    path: '/v1/users',
+    handler: handler.deleteUserByIdHandler,
   },
 ];
 

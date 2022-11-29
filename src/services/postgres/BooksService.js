@@ -25,7 +25,7 @@ class BooksService {
     const nowUtc = new Date().getTime();
     const query = {
       text: `INSERT INTO books(id, name, synopsis, writer, publisher_id, publisher, language, total_page, genres, is_deleted, created_at) 
-              VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+              VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`,
       values: [id, name, synopsis, writer, publisher_id, publisher, language, total_page, genres, false, nowUtc],
     };
     const result = await this._pool.query(query);

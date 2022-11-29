@@ -11,16 +11,16 @@ exports.up = pgm => {
       type: 'TEXT',
       notNull: true,
     },
-    password: {
-      type: 'TEXT',
-      notNull: true,
-    },
     profile_pic: {
       type: 'TEXT',
       notNull: false,
     },
     name: {
       type: 'TEXT',
+      notNull: true,
+    },
+    role: {
+      type: 'INTEGER',
       notNull: true,
     },
     phone_number: {

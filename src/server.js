@@ -1,14 +1,12 @@
 const Hapi = require('@hapi/hapi');
-const Jwt = require('@hapi/jwt');
 const Inert = require('@hapi/inert');
+const admin = require('firebase-admin');
+const serviceAccount = require('../serviceAccountKey.json');
+const FirebaseAuth = require('./services/firebase/FirebaseAuth');
 
 const users = require('./api/users');
 const UsersService = require('./services/postgres/UsersService');
-
-const authentications = require('./api/authentications');
-const AuthenticationsService = require('./services/postgres/AuthenticationsService');
-const TokenManager = require('./tokenize/TokenManager');
-const AuthenticationsValidator = require('./validator/authentications');
+const UsersValidator = require('./validator/users');
 
 const genres = require('./api/genres');
 const GenresService = require('./services/postgres/GenresService');
@@ -22,6 +20,11 @@ const prices = require('./api/prices');
 const PricesService = require('./services/postgres/PricesService');
 const PricesValidator = require('./validator/prices');
 
+const sales = require('./api/sales');
+const SalesService = require('./services/postgres/SalesService');
+const SalesValidator = require('./validator/sales');
+
+const TokenManager = require('./tokenize/GenerateSignature');
 // const CacheService = require('./services/redis/CacheService');
 
 const ClientError = require('./exceptions/ClientError');
@@ -31,10 +34,14 @@ require('dotenv').config();
 const init = async () => {
 //   const cacheService = new CacheService();
   const usersService = new UsersService();
-  const authenticationsService = new AuthenticationsService();
   const genresService = new GenresService();
   const booksService = new BooksService();
   const pricesService = new PricesService();
+  const salesService = new SalesService();
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -48,43 +55,24 @@ const init = async () => {
 
   await server.register([
     {
-      plugin: Jwt,
+      plugin: Inert,
     },
     {
-      plugin: Inert,
+      plugin: FirebaseAuth,
     },
   ]);
 
-  server.auth.strategy('seebook_jwt', 'jwt', {
-    keys: process.env.ACCESS_TOKEN_KEY,
-    verify: {
-      aud: false,
-      iss: false,
-      sub: false,
-      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
-    },
-    validate: (artifacts) => ({
-      isValid: true,
-      credentials: {
-        uid: artifacts.decoded.payload.uid,
-      },
-    }),
+  server.auth.strategy('firebase', 'firebase', {
+    instance: admin,
   });
-  server.auth.default('seebook_jwt');
+  server.auth.default('firebase');
 
   await server.register([
     {
       plugin: users,
       options: {
         service: usersService,
-      },
-    },
-    {
-      plugin: authentications,
-      options: {
-        service: authenticationsService,
-        tokenManager: TokenManager,
-        validator: AuthenticationsValidator,
+        validator: UsersValidator,
       },
     },
     {
@@ -99,6 +87,7 @@ const init = async () => {
       plugin: books,
       options: {
         service: booksService,
+        userService: usersService,
         validator: BooksValidator,
       },
     },
@@ -106,7 +95,16 @@ const init = async () => {
       plugin: prices,
       options: {
         service: pricesService,
+        userService: usersService,
         validator: PricesValidator,
+      },
+    },
+    {
+      plugin: sales,
+      options: {
+        service: salesService,
+        tokenManager: TokenManager,
+        validator: SalesValidator,
       },
     },
   ]);

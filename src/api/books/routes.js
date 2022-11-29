@@ -3,6 +3,7 @@ const routes = (handler) => [
     method: 'GET',
     path: '/v1/books',
     handler: handler.getBooksHandler,
+    options: { auth: false },
   },
   {
     method: 'POST',
