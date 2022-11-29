@@ -21,7 +21,7 @@ exports.up = pgm => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     },
-    price_name: {
+    price_type: {
       type: 'VARCHAR(20)',
       notNull: true,
     },
@@ -45,6 +45,10 @@ exports.up = pgm => {
       type: 'VARCHAR(10)',
       notNull: false,
     },
+    payment_channel: {
+      type: 'VARCHAR(10)',
+      notNull: false,
+    },
     status: {
       type: 'INT',
       notNull: true,
@@ -55,6 +59,10 @@ exports.up = pgm => {
     },
     updated_at: {
       type: 'BIGINT',
+      notNull: false,
+    },
+    trx_id: {
+      type: 'VARCHAR(50)',
       notNull: false,
     },
   });

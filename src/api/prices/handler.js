@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 class PricesHandler {
-  constructor(service, validator) {
+  constructor(service, userService, validator) {
     this._service = service;
+    this._userService = userService;
     this._validator = validator;
 
     this.postPricesHandler = this.postPricesHandler.bind(this);
@@ -11,9 +12,11 @@ class PricesHandler {
   }
 
   async postPricesHandler(request) {
-    this._validator.validatePostPricesPayload(request.payload);
+    const { uid } = request.auth.credentials;
     const { bookId } = request.params;
     const { list_price } = request.payload;
+    this._validator.validatePostPricesPayload(request.payload);
+    await this._userService.verifyAccessNotUser(uid);
     const data = await this._service.addPrices(bookId, list_price);
     return {
       status: 'success',

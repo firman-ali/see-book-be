@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 class BooksHandler {
-  constructor(service, validator) {
+  constructor(service, userService, validator) {
     this._service = service;
+    this._userService = userService;
     this._validator = validator;
 
     this.getBooksHandler = this.getBooksHandler.bind(this);
@@ -20,7 +21,9 @@ class BooksHandler {
   }
 
   async postBooksHandler(request) {
+    const { uid } = request.auth.credentials;
     this._validator.validatePostBooksPayload(request.payload);
+    await this._userService.verifyAccessNotUser(uid);
     const {
       name, synopsis, writer, language, publisher_id, publisher, total_page, genres,
     } = request.payload;
