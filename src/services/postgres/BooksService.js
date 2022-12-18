@@ -1,12 +1,24 @@
 /* eslint-disable max-len */
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
+const fs = require('fs');
 const NotFoundError = require('../../exceptions/NotFoundError');
 const InvariantError = require('../../exceptions/InvariantError');
+require('dotenv').config();
 
 class BooksService {
   constructor() {
-    this._pool = new Pool();
+    this._pool = new Pool({
+      user: process.env.PGUSER,
+      host: process.env.PGHOST,
+      database: process.env.PGDATABASE,
+      password: process.env.PGPASSWORD,
+      port: process.env.PGPORT,
+      rejectUnauthorized: process.env.PGREJECTUNAUTHORIZED,
+      ssl: {
+        cert: fs.readFileSync(`${__dirname}/ca-certificate.crt`),
+      },
+    });
   }
 
   async getBooks() {
