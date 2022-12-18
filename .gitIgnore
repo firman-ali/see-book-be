@@ -2,4 +2,3 @@
 .env
 .prod.env
 serviceAccountKey.json
-package-lock.json
