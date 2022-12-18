@@ -14,9 +14,9 @@ class BooksService {
       database: process.env.PGDATABASE,
       password: process.env.PGPASSWORD,
       port: process.env.PGPORT,
-      rejectUnauthorized: process.env.PGREJECTUNAUTHORIZED,
       ssl: {
-        cert: fs.readFileSync(`${__dirname}/ca-certificate.crt`),
+        rejectUnauthorized: process.env.PGREJECTUNAUTHORIZED,
+        ca: fs.readFileSync('ca-certificate.crt').toString(),
       },
     });
   }
