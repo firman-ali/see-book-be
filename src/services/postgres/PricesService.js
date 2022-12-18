@@ -1,10 +1,22 @@
 const { Pool } = require('pg');
+const fs = require('fs');
 const NotFoundError = require('../../exceptions/NotFoundError');
 const InvariantError = require('../../exceptions/InvariantError');
+require('dotenv').config();
 
 class PricesService {
   constructor() {
-    this._pool = new Pool();
+    this._pool = new Pool({
+      user: process.env.PGUSER,
+      host: process.env.PGHOST,
+      database: process.env.PGDATABASE,
+      password: process.env.PGPASSWORD,
+      port: process.env.PGPORT,
+      ssl: {
+        rejectUnauthorized: process.env.PGREJECTUNAUTHORIZED,
+        ca: fs.readFileSync('ca-certificate.crt').toString(),
+      },
+    });
   }
 
   async addPrices(bookId, list_price) {
