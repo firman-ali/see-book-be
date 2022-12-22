@@ -19,13 +19,15 @@ class BooksService {
         ca: fs.readFileSync('ca-certificate.crt').toString(),
       },
     });
+    // this._pool = new Pool();
   }
 
   async getBooks() {
     const query = {
-      text: `SELECT books.id, books.name, books.writer, book_ratings.rating, book_ratings.total_review 
+      text: `SELECT books.id, books.name, books.writer, books.thumbnail, book_ratings.rating, book_ratings.total_review,  prices.list_price[1] as price_max, prices.list_price[2] as price_min
               FROM books
               INNER JOIN book_ratings ON book_ratings.book = books.id
+              INNER JOIN prices ON prices.book = books.id
               WHERE books.is_deleted = false`,
     };
     const result = await this._pool.query(query);
@@ -49,9 +51,10 @@ class BooksService {
 
   async getBooksById(id) {
     const query = {
-      text: `SELECT books.id, books.name, books.synopsis, books.writer, books.publisher_id, books.publisher, books.language, books.total_page, books.created_at, book_ratings.rating, book_ratings.total_review, books.genres
+      text: `SELECT books.id, books.name, books.synopsis, books.writer, books.publisher_id, books.publisher, books.language, books.total_page, books.created_at, books.thumbnail, book_ratings.rating, book_ratings.total_review, books.genres,  prices.list_price[1] as price_max, prices.list_price[2] as price_min
               FROM books
               INNER JOIN book_ratings ON book_ratings.book = books.id
+              INNER JOIN prices ON prices.book = books.id
               WHERE books.id = $1`,
       values: [id],
     };

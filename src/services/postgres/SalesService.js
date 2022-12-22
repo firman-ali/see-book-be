@@ -18,6 +18,7 @@ class SalesService {
         ca: fs.readFileSync('ca-certificate.crt').toString(),
       },
     });
+    // this._pool = new Pool();
   }
 
   async addSale(uid, {
