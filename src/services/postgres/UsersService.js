@@ -19,6 +19,7 @@ class UsersService {
         ca: fs.readFileSync('ca-certificate.crt').toString(),
       },
     });
+    // this._pool = new Pool();
   }
 
   async addUser(uid, email, { name, phone_number, role }) {
