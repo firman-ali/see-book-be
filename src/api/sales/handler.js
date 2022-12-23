@@ -95,8 +95,6 @@ class SalesHandler {
 
     const recomendation_books = await axios(config_recomendation);
 
-    console.log(recomendation_books);
-
     return {
       status: 'success',
       data: response.data.Data,
