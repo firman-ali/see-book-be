@@ -14,7 +14,11 @@ class BooksHandler {
   }
 
   async getBooksHandler(request) {
-    const params = request.query.name;
+    let params = request.query.name;
+
+    if (params === undefined) {
+      params = '';
+    }
 
     const data = await this._service.getBooks(params);
     return {
