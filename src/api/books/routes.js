@@ -6,6 +6,12 @@ const routes = (handler) => [
     options: { auth: false },
   },
   {
+    method: 'GET',
+    path: '/v1/new-books',
+    handler: handler.getNewBooksHandler,
+    options: { auth: false },
+  },
+  {
     method: 'POST',
     path: '/v1/books',
     handler: handler.postBooksHandler,

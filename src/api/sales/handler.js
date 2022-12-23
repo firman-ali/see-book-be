@@ -82,9 +82,24 @@ class SalesHandler {
 
     await this._service.updateSaleById(sale.id, response.data.Data.TransactionId);
 
+    const config_recomendation = {
+      method: 'post',
+      url: 'https://72ee-110-136-225-202.ngrok.io/v1/books/recomendation',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept-Encoding': 'application/json',
+      },
+      data: { book_id: request.payload.book },
+    };
+
+    const recomendation_books = await axios(config_recomendation);
+
+    console.log(recomendation_books);
+
     return {
       status: 'success',
       data: response.data.Data,
+      recomendation_books: recomendation_books.data,
     };
   }
 

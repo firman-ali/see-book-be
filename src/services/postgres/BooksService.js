@@ -22,13 +22,28 @@ class BooksService {
     // this._pool = new Pool();
   }
 
-  async getBooks() {
+  async getBooks(params) {
     const query = {
       text: `SELECT books.id, books.name, books.writer, books.thumbnail, book_ratings.rating, book_ratings.total_review,  prices.list_price[1] as price_max, prices.list_price[2] as price_min
               FROM books
               INNER JOIN book_ratings ON book_ratings.book = books.id
               INNER JOIN prices ON prices.book = books.id
-              WHERE books.is_deleted = false`,
+              WHERE books.is_deleted = false AND books.name LIKE '%'||$1||'%'`,
+      values: [params],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
+  async getNewBooks() {
+    const query = {
+      text: `SELECT books.id, books.name, books.writer, books.thumbnail, book_ratings.rating, book_ratings.total_review,  prices.list_price[1] as price_max, prices.list_price[2] as price_min
+              FROM books
+              INNER JOIN book_ratings ON book_ratings.book = books.id
+              INNER JOIN prices ON prices.book = books.id
+              WHERE books.is_deleted = false
+              ORDER BY books.created_at DESC LIMIT 5`,
     };
     const result = await this._pool.query(query);
     return result.rows;

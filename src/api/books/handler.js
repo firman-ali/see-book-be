@@ -10,10 +10,21 @@ class BooksHandler {
     this.getBooksByIdHandler = this.getBooksByIdHandler.bind(this);
     this.putBooksByIdHandler = this.putBooksByIdHandler.bind(this);
     this.deleteBooksByIdHandler = this.deleteBooksByIdHandler.bind(this);
+    this.getNewBooksHandler = this.getNewBooksHandler.bind(this);
   }
 
-  async getBooksHandler() {
-    const data = await this._service.getBooks();
+  async getBooksHandler(request) {
+    const params = request.query.name;
+
+    const data = await this._service.getBooks(params);
+    return {
+      status: 'success',
+      data,
+    };
+  }
+
+  async getNewBooksHandler() {
+    const data = await this._service.getNewBooks();
     return {
       status: 'success',
       data,
