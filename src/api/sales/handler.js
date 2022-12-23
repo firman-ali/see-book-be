@@ -1,6 +1,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const AuthenticationError = require('../../exceptions/AuthenticationError');
+require('dotenv').config();
 
 class SalesHandler {
   constructor(service, tokenManager, validator) {
@@ -84,7 +85,7 @@ class SalesHandler {
 
     const config_recomendation = {
       method: 'post',
-      url: 'https://72ee-110-136-225-202.ngrok.io/v1/books/recomendation',
+      url: process.env.NGROK_HOST,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept-Encoding': 'application/json',
